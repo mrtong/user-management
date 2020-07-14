@@ -17,9 +17,9 @@ import static javax.persistence.CascadeType.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDetail implements Serializable {
+public class UserDetails implements Serializable {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
     private String title;
 
