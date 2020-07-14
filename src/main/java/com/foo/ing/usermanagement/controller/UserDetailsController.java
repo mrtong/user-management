@@ -13,19 +13,19 @@ import org.springframework.web.server.ResponseStatusException;
 
 @RestController
 @Slf4j
-@RequestMapping(path = "/")
+@RequestMapping(path = "/api/userdetails")
 public class UserDetailsController {
     private UserDetailsService userDetailsService;
 
-    public UserDetailsController(UserDetailsService userDetailsService) {
+    public UserDetailsController(final UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
     }
 
     @GetMapping(
-            value = "{userDetailsId}",
+            value = "{id}",
             produces = {"application/json"})
     public ResponseEntity<UserDetails> getUserDetailsById(
-            final @PathVariable Integer userDetailsId) {
+            final @PathVariable(name="id") Integer userDetailsId) {
         final UserDetails userDetails = userDetailsService.findUserDetailsById(userDetailsId);
         if (userDetails == null) {
             throw new ResponseStatusException(

@@ -1,5 +1,6 @@
 package com.foo.ing.usermanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,7 +21,9 @@ import static javax.persistence.CascadeType.*;
 public class UserDetails implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonIgnore
     private Integer userId;
+
     private String title;
 
     //I do not know why in the requirement it is this.
