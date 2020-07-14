@@ -1,5 +1,6 @@
 package com.foo.ing.usermanagement.service;
 
+import com.foo.ing.usermanagement.exception.InvalidUserDetailsException;
 import com.foo.ing.usermanagement.exception.UserDetailsNotFoundException;
 import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.repo.UserDetailsRepo;
@@ -30,20 +31,27 @@ public class UserDetailsService {
         throw new UserDetailsNotFoundException("No UserDetails were found for id " + userDetailsId);
     }
 
-    @Transactional(rollbackFor = UserDetailsNotFoundException.class)
+    @Transactional(rollbackFor = InvalidUserDetailsException.class)
     public UserDetails updateUserDetails(
             final Integer userDetailsId,
-            UserDetails userDetails) {
+            UserDetails userDetails) throws InvalidUserDetailsException {
 
         final UserDetails foundUserDetails = findUserDetailsById(userDetailsId);
         log.debug("UserDetails was found in updateUserDetails(...).");
 
         userDetails.setUserId(foundUserDetails.getUserId());
+        try {
 
-        final UserDetails updatedUserDetails = userDetailsRepo.save(userDetails);
+            UserDetails updatedUserDetails = userDetailsRepo.save(userDetails);
+            log.info("UserDetails was updated.");
 
-        log.info("UserDetails was updated.");
+            return updatedUserDetails;
+        } catch (Exception e) {
+            log.error("Some exceptions happened while trying to save the userdetails [{}]", userDetailsId);
 
-        return updatedUserDetails;
+            throw new InvalidUserDetailsException("Some exceptions happened while trying to save the userdetails " + userDetailsId);
+        }
+
+
     }
 }

@@ -1,5 +1,6 @@
 package com.foo.ing.usermanagement.controller;
 
+import com.foo.ing.usermanagement.exception.InvalidUserDetailsException;
 import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.service.UserDetailsService;
 import lombok.extern.slf4j.Slf4j;
@@ -23,11 +24,14 @@ public class UserDetailsController {
         this.userDetailsService = userDetailsService;
     }
 
+    //According to REST API, query by primary key should be a path variable instead of a request param
+    //@PathVariable is not meant to be validated in order to send back a readable message to the user.
+    //As principle a pathVariable should never be invalid.
     @GetMapping(
             value = "{id}",
             produces = {"application/json"})
     public ResponseEntity<UserDetails> getUserDetailsById(
-            final @PathVariable(name = "id") Integer userDetailsId) {
+            final @PathVariable(name = "id")  Integer userDetailsId) {
         final UserDetails userDetails = userDetailsService.findUserDetailsById(userDetailsId);
         if (userDetails == null) {
             log.error("There is no user details found for userDetails id [{}]", userDetailsId);
@@ -46,8 +50,9 @@ public class UserDetailsController {
             produces = {"application/json"})
     public ResponseEntity<UserDetails> updateSymbol(
             final @PathVariable(name = "id") Integer userDetailsId,
-            final @RequestBody UserDetails userDetails)  {
-        final UserDetails updatedUserDetails = userDetailsService.updateUserDetails(userDetailsId, userDetails);
+            final @RequestBody UserDetails userDetails) throws InvalidUserDetailsException {
+        final UserDetails updatedUserDetails
+                = userDetailsService.updateUserDetails(userDetailsId, userDetails);
 
         return new ResponseEntity<>(updatedUserDetails, HttpStatus.OK);
     }

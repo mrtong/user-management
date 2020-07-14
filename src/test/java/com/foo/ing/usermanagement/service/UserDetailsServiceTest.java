@@ -1,5 +1,6 @@
 package com.foo.ing.usermanagement.service;
 
+import com.foo.ing.usermanagement.exception.InvalidUserDetailsException;
 import com.foo.ing.usermanagement.exception.UserDetailsNotFoundException;
 import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.repo.UserDetailsRepo;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mock;
+import org.mockito.exceptions.base.MockitoException;
 import org.mockito.junit.MockitoJUnitRunner;
 
 import java.util.Optional;
@@ -43,7 +45,7 @@ public class UserDetailsServiceTest {
     }
 
     @Test
-    public void updateUserDetails_shouldReturnUpdatedUserDetailsObjectWhenUserDetailsIsFound() {
+    public void updateUserDetails_shouldReturnUpdatedUserDetailsObjectWhenUserDetailsIsFound() throws InvalidUserDetailsException {
         final UserDetails updatedUserDetails
                 = MockDataGenerator.generateUpdatedUserDetails();
 
@@ -58,8 +60,22 @@ public class UserDetailsServiceTest {
 
     }
 
+    @Test(expected = InvalidUserDetailsException.class)
+    public void updateUserDetails_shouldRaiseExceptionWhenSaveFailedEvenUserDetailsIsFound() throws InvalidUserDetailsException {
+        final UserDetails updatedUserDetails
+                = MockDataGenerator.generateUpdatedUserDetails();
+
+        when(userDetailsRepo.findById(anyInt())).thenReturn(Optional.of(MockDataGenerator.generateOneUserDetails()));
+        when(userDetailsRepo.save(ArgumentMatchers.any())).thenThrow(new MockitoException(""));
+
+        final UserDetails foundUserDetails =
+                userDetailsService.updateUserDetails(1, updatedUserDetails);
+
+
+    }
+
     @Test(expected = UserDetailsNotFoundException.class)
-    public void updateUserDetails_shouldRaiseExceptionWhenUserDetailsNotFound() {
+    public void updateUserDetails_shouldRaiseExceptionWhenUserDetailsNotFound() throws InvalidUserDetailsException {
         final UserDetails updatedUserDetails
                 = MockDataGenerator.generateUpdatedUserDetails();
 
