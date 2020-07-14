@@ -9,6 +9,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 
+import static javax.persistence.CascadeType.*;
+
 @Entity
 @Table(name = "user_details")
 @Data
@@ -32,4 +34,8 @@ public class UserDetail implements Serializable {
 
     @JsonProperty("gender")
     private String gender;
+
+    @OneToOne(cascade = {PERSIST, REMOVE, MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name="address_id")
+    private Address address;
 }
