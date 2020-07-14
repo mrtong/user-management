@@ -28,4 +28,20 @@ public class UserDetailsService {
 
         throw new UserDetailsNotFoundException("No UserDetails were found for id " + userDetailsId);
     }
+
+    public UserDetails updateUserDetails(
+            final Integer userDetailsId,
+            UserDetails userDetails) {
+
+        final UserDetails foundUserDetails = findUserDetailsById(userDetailsId);
+        log.debug("UserDetails was found in updateUserDetails(...).");
+
+        userDetails.setUserId(foundUserDetails.getUserId());
+
+        final UserDetails updatedUserDetails = userDetailsRepo.save(userDetails);
+
+        log.info("UserDetails was updated.");
+
+        return updatedUserDetails;
+    }
 }

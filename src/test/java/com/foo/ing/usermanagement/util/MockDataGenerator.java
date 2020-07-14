@@ -19,6 +19,17 @@ public final class MockDataGenerator {
                 .build();
     }
 
+    public static UserDetails generateUpdatedUserDetails(){
+        return UserDetails.builder()
+                .userId(1)
+                .firstName("updatedTest")
+                .lastName("testlast")
+                .gender("male")
+                .title("mr")
+                .address(generateOneAddress())
+                .build();
+    }
+
     public static Address generateOneAddress(){
         return Address.builder()
                 .addressId(1)
