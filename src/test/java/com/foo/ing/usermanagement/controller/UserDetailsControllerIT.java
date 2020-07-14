@@ -1,11 +1,11 @@
 package com.foo.ing.usermanagement.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.foo.ing.usermanagement.model.Address;
 import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.service.UserDetailsService;
 import com.foo.ing.usermanagement.util.MockDataGenerator;
-import com.google.gson.Gson;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -62,10 +62,11 @@ public class UserDetailsControllerIT {
 
         assertEquals(expectedResponse, response);
 
-        Gson gson = new Gson();
-        final UserDetails returnedUserDetails = gson.fromJson(response, UserDetails.class);
+        final ObjectMapper om = new ObjectMapper();
+        final UserDetails returnedUserDetails = om.readValue(response, UserDetails.class);
 
         assertNotNull(returnedUserDetails);
+        assertEquals("test", returnedUserDetails.getFirstName());
         assertEquals("testlast", returnedUserDetails.getLastName());
 
 

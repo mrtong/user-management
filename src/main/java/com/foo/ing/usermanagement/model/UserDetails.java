@@ -1,7 +1,9 @@
 package com.foo.ing.usermanagement.model;
 
+import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonSetter;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,9 +28,7 @@ public class UserDetails implements Serializable {
 
     private String title;
 
-    //I do not know why in the requirement it is this.
     @Column(name = "first_name")
-    @JsonProperty("firstn")
     private String firstName;
 
     @Column(name = "last_name")
@@ -41,4 +41,15 @@ public class UserDetails implements Serializable {
     @OneToOne(cascade = {PERSIST, REMOVE, MERGE}, fetch = FetchType.EAGER)
     @JoinColumn(name="address_id")
     private Address address;
+
+    @JsonGetter("firstn")
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @JsonSetter("firstn")
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
 }
