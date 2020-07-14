@@ -5,6 +5,7 @@ import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.repo.UserDetailsRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -29,6 +30,7 @@ public class UserDetailsService {
         throw new UserDetailsNotFoundException("No UserDetails were found for id " + userDetailsId);
     }
 
+    @Transactional(rollbackFor = UserDetailsNotFoundException.class)
     public UserDetails updateUserDetails(
             final Integer userDetailsId,
             UserDetails userDetails) {
