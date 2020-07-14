@@ -28,9 +28,13 @@ public class UserDetailsController {
             final @PathVariable(name="id") Integer userDetailsId) {
         final UserDetails userDetails = userDetailsService.findUserDetailsById(userDetailsId);
         if (userDetails == null) {
+            log.error("There is no user details found for userDetails id [{}]", userDetailsId);
+
             throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "There is no user details found for userDetails id " + userDetailsId);
         }
+        log.debug("UserDetails was found for id [{}]", userDetailsId);
+
         return new ResponseEntity<>(userDetails, HttpStatus.OK);
     }
 }
