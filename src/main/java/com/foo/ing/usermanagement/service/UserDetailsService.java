@@ -41,8 +41,12 @@ public class UserDetailsService {
 
         userDetails.setUserId(foundUserDetails.getUserId());
         try {
-
-            UserDetails updatedUserDetails = userDetailsRepo.save(userDetails);
+            //in the implementation of JpaRepository, the save method does both persist and merge functionality
+            //in the definition of the POJO UserDetails, the primary key is defined as int with auto increment
+            //this is the best practice for DB performance and index performance.
+            //Again from the implementation of the save method, I cant see any specific exception raised,
+            //thus here I just use Exception for the catch.
+            final UserDetails updatedUserDetails = userDetailsRepo.save(userDetails);
             log.info("UserDetails was updated.");
 
             return updatedUserDetails;
