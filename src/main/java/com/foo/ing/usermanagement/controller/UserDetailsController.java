@@ -18,7 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 @Slf4j
 @RequestMapping(path = "/api/userdetails")
 public class UserDetailsController {
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     public UserDetailsController(final UserDetailsService userDetailsService) {
         this.userDetailsService = userDetailsService;
@@ -31,7 +31,7 @@ public class UserDetailsController {
             value = "{id}",
             produces = {"application/json"})
     public ResponseEntity<UserDetails> getUserDetailsById(
-            final @PathVariable(name = "id")  Integer userDetailsId) {
+            final @PathVariable(name = "id") Integer userDetailsId) {
         final UserDetails userDetails = userDetailsService.findUserDetailsById(userDetailsId);
         if (userDetails == null) {
             log.error("There is no user details found for userDetails id [{}]", userDetailsId);

@@ -13,7 +13,7 @@ import java.util.Optional;
 @Service
 @Slf4j
 public class UserDetailsService {
-    private UserDetailsRepo userDetailsRepo;
+    private final UserDetailsRepo userDetailsRepo;
 
     public UserDetailsService(final UserDetailsRepo userDetailsRepo) {
         this.userDetailsRepo = userDetailsRepo;

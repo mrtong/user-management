@@ -49,7 +49,7 @@ public class UserDetails implements Serializable {
     private String gender;
 
     @OneToOne(cascade = {PERSIST, REMOVE, MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name="address_id")
+    @JoinColumn(name = "address_id")
     private Address address;
 
     @JsonGetter("firstn")
