@@ -7,20 +7,20 @@ import com.foo.ing.usermanagement.model.Address;
 import com.foo.ing.usermanagement.model.UserDetails;
 import com.foo.ing.usermanagement.service.UserDetailsService;
 import com.foo.ing.usermanagement.util.MockDataGenerator;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -31,23 +31,16 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 public class UserDetailsControllerIT {
 
-    @InjectMocks
-    private UserDetailsController mockedController;
-
+    @Autowired
     private MockMvc mvc;
 
-    @Mock
+    @MockBean
     private UserDetailsService userDetailsService;
-
-    @Before
-    public void setup() {
-
-        MockitoAnnotations.initMocks(this);
-        this.mvc = MockMvcBuilders.standaloneSetup(mockedController).build();
-    }
 
     @Test
     public void givenUserDetailsID_whenFound_thenReturnTheFoundUserDetailsWithAddress() throws Exception {
@@ -99,7 +92,8 @@ public class UserDetailsControllerIT {
     }
 
     @Test
-    public void givenUserDetailsID_whenFound_thenShouldUpdate() throws Exception {
+    @WithMockUser(username = "admin", roles = {"ADMIN"})
+    public void givenUserDetailsID_whenFound_And_HaveAdminRole_thenShouldUpdate() throws Exception {
 
         final UserDetails userDetails = MockDataGenerator.generateUpdatedUserDetails();
         final String content
@@ -129,6 +123,29 @@ public class UserDetailsControllerIT {
 
         assertNotNull(returnedUserDetails);
         assertEquals("updatedTest", returnedUserDetails.getFirstName());
+    }
+
+    @Test
+    @WithMockUser(username = "user")
+    public void givenUserDetailsID_whenFound_And_HaveUserRole_thenReturnStatusForbidden() throws Exception {
+
+        final UserDetails userDetails = MockDataGenerator.generateUpdatedUserDetails();
+        final String content
+                = "{\"title\":\"mr\",\"address\":{\"street\":\"12345 holling rd\",\"city\":\"Sydney\",\"state\":\"NSW\",\"postcode\":\"2000\"},\"firstn\":\"updatedTest\",\"lastName\":\"testlast\",\"gender\":\"male\"}";
+
+        when(userDetailsService.updateUserDetails(anyInt(), any())).thenReturn(userDetails);
+
+        final MockHttpServletRequestBuilder builder =
+                MockMvcRequestBuilders.patch("/api/userdetails/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(content);
+
+        final MvcResult mvcResult = mvc.perform(builder)
+                .andExpect(status().isForbidden())
+                .andReturn();
+
     }
 
 }
