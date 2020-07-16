@@ -1,0 +1,12 @@
+{
+  "title": "Mr",
+  "address": {
+    "street": "abc street",
+    "city": "Sydney",
+    "state": "NSW",
+    "postcode": "2002"
+  },
+  "firstn": "Luke",
+  "lastName": "Tong",
+  "gender": "Male"
+}

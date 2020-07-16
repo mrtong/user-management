@@ -1,0 +1,45 @@
+{
+  "provider": {
+    "name": "usermanagement"
+  },
+  "consumer": {
+    "name": "test_consumer"
+  },
+  "interactions": [
+    {
+      "description": "get a valid userdetails",
+      "providerState": "have a valid userdetails",
+      "request": {
+        "method": "get",
+        "path": "/api/userdetails/1"
+      },
+      "response": {
+        "status": 200,
+        "body": {
+          "title": "Mr",
+          "address": {
+            "street": "abc street",
+            "city": "Sydney",
+            "state": "NSW",
+            "postcode": "2000"
+          },
+          "firstn": "Luke",
+          "lastName": "Tong",
+          "gender": "Male"
+        }
+      }
+    },
+    {
+      "description": "No UserDetails were found",
+      "providerState": "No UserDetails were found",
+      "request": {
+        "method": "get",
+        "path": "/api/userdetails/100"
+      },
+      "response": {
+        "status": 404
+      }
+    }
+  ]
+}
+
