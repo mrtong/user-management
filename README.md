@@ -4,3 +4,6 @@ How to run?
 2. make sure you have maven installed
 3. mvn clean install
 4. java -jar usermanagement-0.0.1-SNAPSHOT.jar
+
+In postman, run this for get query:
+![](https://github.com/mrtong/user-management/blob/master/screenshots/get_query.png)
