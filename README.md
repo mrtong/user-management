@@ -12,6 +12,8 @@ In postman, run this for get query: the `username/password` is user/password
 
 run this for update: the `username/password` is admin/password
 <img src="https://github.com/mrtong/user-management/blob/master/screenshots/update200.png" width="70%" height="60%"/>
+This is the screen dump for request body
+<img src="https://github.com/mrtong/user-management/blob/master/screenshots/update200_1.png" width="70%" height="60%"/>
 
 if you pass username as user then http status 403(forbidden) will be raised as shown below:
 <img src="https://github.com/mrtong/user-management/blob/master/screenshots/update403.png" width="70%" height="60%"/>
