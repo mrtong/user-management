@@ -44,6 +44,7 @@ public class UserDetailsController {
         return new ResponseEntity<>(userDetails, HttpStatus.OK);
     }
 
+    //we can do put here as well for update
     @PatchMapping(
             value = "{id}",
             consumes = "application/json",
