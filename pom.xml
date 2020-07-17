@@ -128,7 +128,7 @@
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <version>3.0.0-M3</version>
                 <configuration>
-                    <skipITs>true</skipITs>
+                    <skipITs>false</skipITs>
                 </configuration>
             </plugin>
 
